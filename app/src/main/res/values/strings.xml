@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">insta clone</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="enter_email">example@mail.com</string>
+    <string name="enter_password">••••••••</string>
+    <string name="button_sign_in">SIGN IN</string>
+    <string name="login">LOGIN</string>
+    <string name="pass_sign_up">Don\'t have an account yet? Sign Up</string>
 </resources>

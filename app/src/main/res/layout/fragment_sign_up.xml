@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".view.SignUpFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarSignUp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/editTextEmailSignUp"
         android:layout_width="263dp"
@@ -24,11 +13,11 @@
         android:layout_marginTop="100dp"
         android:ems="10"
         android:hint="Email"
-        android:inputType="text"
+        android:inputType="text|textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarSignUp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextUserNameSignUp"
