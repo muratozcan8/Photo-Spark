@@ -1,4 +1,4 @@
 package com.muratozcan.instaclone.model
 
-class Post {
+data class Post(val username: String, val comment: String, val downloadUrl: String, val lat: String, val lng: String) {
 }

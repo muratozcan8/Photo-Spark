@@ -24,8 +24,7 @@ class LoginFragment : Fragment() {
 
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            //Eğer kullanıcı daha önceden giriş yaptıysa otomatik olarak homepage'e geçer
-            //navController.navigate(R.id.action_loginFragment_to_homePageFragment)
+            navController.navigate(R.id.action_loginFragment_to_homePageFragment)
         }
 
         binding.buttonSignIn.setOnClickListener{

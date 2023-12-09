@@ -11,4 +11,6 @@
     <string name="sign_up">SIGN UP</string>
     <string name="username">Username</string>
     <string name="enter_username">Enter username</string>
+    <string name="enter_comment">Enter Comment</string>
+    <string name="share">SHARE</string>
 </resources>
