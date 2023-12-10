@@ -107,11 +107,12 @@ class ShareFragment : Fragment() {
                             postMap.put("date", Timestamp.now())
                             postMap.put("lat", lat.toString())
                             postMap.put("lng", lng.toString())
+                            postMap.put("uid", auth.currentUser!!.uid)
 
                             firestore.collection("Post").add(postMap).addOnSuccessListener {
 
                                 val navController = findNavController()
-                                navController.navigate(R.id.action_shareFragment_to_homePageFragment)
+                                navController.navigate(R.id.action_homePageFragment_to_searchFragment)
 
                             }.addOnFailureListener {
                                 Toast.makeText(this.context, it.localizedMessage, Toast.LENGTH_LONG).show()

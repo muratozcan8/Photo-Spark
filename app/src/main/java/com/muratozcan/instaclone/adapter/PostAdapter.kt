@@ -22,6 +22,7 @@ class PostAdapter(private val postList : ArrayList<Post>) : RecyclerView.Adapter
         holder.binding.recyclerUsernameText.text = postList[position].username
         holder.binding.recyclerCommentText.text = postList[position].comment
         Picasso.get().load(postList.get(position).downloadUrl).into(holder.binding.recyclerImageView)
+        holder.binding.recyclerDate.text = postList[position].date
     }
 
     override fun getItemCount(): Int {

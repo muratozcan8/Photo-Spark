@@ -29,27 +29,4 @@
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/homePageFragment"
-        android:name="com.muratozcan.instaclone.view.HomePageFragment"
-        android:label="fragment_home_page"
-        tools:layout="@layout/fragment_home_page" >
-        <action
-            android:id="@+id/action_homePageFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/shareFragment"
-        android:name="com.muratozcan.instaclone.view.ShareFragment"
-        android:label="fragment_share"
-        tools:layout="@layout/fragment_share" >
-        <action
-            android:id="@+id/action_shareFragment_to_homePageFragment"
-            app:destination="@id/homePageFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.muratozcan.instaclone.view.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
 </navigation>

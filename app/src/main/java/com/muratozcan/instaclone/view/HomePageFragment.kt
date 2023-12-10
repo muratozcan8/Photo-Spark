@@ -1,6 +1,7 @@
 package com.muratozcan.instaclone.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,9 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
@@ -17,6 +20,9 @@ import com.muratozcan.instaclone.R
 import com.muratozcan.instaclone.adapter.PostAdapter
 import com.muratozcan.instaclone.databinding.FragmentHomePageBinding
 import com.muratozcan.instaclone.model.Post
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomePageFragment : Fragment() {
 
@@ -28,11 +34,12 @@ class HomePageFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHomePageBinding.inflate(inflater, container, false)
 
+        auth = Firebase.auth
         db = Firebase.firestore
 
         postArrayList = ArrayList<Post>()
-
-        getData()
+        getFriends()
+        //getData()
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
         postAdapter = PostAdapter(postArrayList)
         binding.recyclerView.adapter = postAdapter
@@ -46,7 +53,7 @@ class HomePageFragment : Fragment() {
         return binding.root
     }
 
-    private fun getData() {
+    private fun getData(friends: MutableMap<String, Any>?) {
         db.collection("Post").orderBy("date", Query.Direction.DESCENDING).addSnapshotListener { value, error ->
             if (error != null) {
                 Toast.makeText(this.context, error.localizedMessage, Toast.LENGTH_LONG).show()
@@ -63,9 +70,17 @@ class HomePageFragment : Fragment() {
                             val comment = document.get("comment") as String
                             val username = document.get("username") as String
                             val downloadUrl = document.get("downloadUrl") as String
+                            val uid = document.get("uid") as String
+                            val date = document.get("date") as Timestamp
 
-                            val post = Post(username, comment, downloadUrl, "0", "0")
-                            postArrayList.add(post)
+                            val formattedDate = convertTimestampToDateString(date.seconds)
+
+                            val friendList = friends?.get("Follow") as ArrayList<*>
+
+                            if (friendList.contains(uid) || uid == auth.currentUser?.uid) {
+                                val post = Post(username, comment, downloadUrl, "0", "0", uid, formattedDate)
+                                postArrayList.add(post)
+                            }
                         }
 
                         postAdapter.notifyDataSetChanged()
@@ -73,5 +88,29 @@ class HomePageFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun getFriends() {
+        auth.currentUser?.let {
+            db.collection("Friendship").document(it.uid).addSnapshotListener { value, error ->
+                if (error != null) {
+                    Toast.makeText(this.context, error.localizedMessage, Toast.LENGTH_LONG).show()
+                } else {
+                    if (value != null) {
+
+                        val documents = value.data
+                        getData(documents)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun convertTimestampToDateString(timestamp: Long): String {
+        val date = Date(timestamp * 1000)
+
+        val dateFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
+
+        return dateFormat.format(date)
     }
 }
