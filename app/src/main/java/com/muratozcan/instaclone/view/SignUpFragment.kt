@@ -49,10 +49,17 @@ class SignUpFragment : Fragment() {
                     postMap.put("email", auth.currentUser?.email.toString())
                     postMap.put("username", binding.editTextUserNameSignUp.text.toString())
 
-                    firestore.collection("User").document(auth.currentUser?.uid.toString()).set(postMap).addOnSuccessListener {
-                        val navController = findNavController()
-                        navController.navigate(R.id.action_signUpFragment_to_loginFragment)
+                    val friendshipMap = hashMapOf<String, ArrayList<String>>()
+                    val follow = ArrayList<String>();
+                    friendshipMap.put("Follow", follow);
+
+                    firestore.collection("Friendship").document(auth.currentUser?.uid.toString()).set(friendshipMap).addOnSuccessListener {
+                        firestore.collection("User").document(auth.currentUser?.uid.toString()).set(postMap).addOnSuccessListener {
+                            val navController = findNavController()
+                            navController.navigate(R.id.action_signUpFragment_to_loginFragment)
+                        }
                     }
+
 
 
                 }.addOnFailureListener {
