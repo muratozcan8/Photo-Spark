@@ -41,12 +41,15 @@ class SearchFragment : Fragment() {
         userList= ArrayList<User>()
 
         binding.btnSearch.setOnClickListener {
+
             val searchedText = binding.searchEditText.text.toString()
             if (searchedText.isNotEmpty()) {
                 getUsers(searchedText)
             } else {
                 userList.clear()
+                userAdapter = UserAdapter(userList)
                 userAdapter.notifyDataSetChanged()
+                Toast.makeText(this.context, "Please enter username field!", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -54,21 +57,22 @@ class SearchFragment : Fragment() {
     }
 
     private fun getUsers(query:String){
+        userAdapter = UserAdapter(userList)
         db.collection("User").whereGreaterThanOrEqualTo("username", query)
             .whereLessThanOrEqualTo("username", query + "\uf8ff").get().addOnSuccessListener { value ->
 
                 if (value!=null){
                     if (!value.isEmpty){
-
                         userList.clear()
-
                         for (document in value){
-                            val email = document.getString("email") as String
-                            val username= document.getString("username") as String
-                            val userID=document.id.toString()
-                            val user = User(email,username,userID)
-                            Log.e("USER","UserID: $userID, Email: $email, Username: $username")
-                            userList.add(user)
+                            if (auth.currentUser?.uid!=document.id.toString()){
+                                val email = document.getString("email") as String
+                                val username= document.getString("username") as String
+                                val userID=document.id.toString()
+                                val user = User(email,username,userID)
+                                Log.e("USER","UserID: $userID, Email: $email, Username: $username")
+                                userList.add(user)
+                            }
                         }
 
                         userAdapter = UserAdapter(userList)
@@ -76,13 +80,22 @@ class SearchFragment : Fragment() {
                         binding.recyclerViewSearch.adapter = userAdapter
 
                         userAdapter.notifyDataSetChanged()
+                    }else{
+                        userList.clear()
+                        userAdapter.notifyDataSetChanged()
                     }
                 }else{
+                    Log.e("TOAST","NOT FOUND USER")
                     Toast.makeText(this.context, "No user with this name was found.", Toast.LENGTH_LONG).show()
                 }
 
         }.addOnFailureListener {
             Log.e("SEARCH","NOT FOUND USER: ${it.localizedMessage}")
+        }
+
+        if (userList.size<=0){
+            Log.e("TOAST","NOT FOUND USER")
+            Toast.makeText(this.context, "No user with this name was found.", Toast.LENGTH_LONG).show()
         }
     }
 
