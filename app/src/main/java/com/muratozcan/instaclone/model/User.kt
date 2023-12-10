@@ -1,4 +1,3 @@
 package com.muratozcan.instaclone.model
 
-class User {
-}
+data class User(val email:String,var username:String,var userID:String) {}

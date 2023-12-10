@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +36,12 @@ class HomePageFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
         postAdapter = PostAdapter(postArrayList)
         binding.recyclerView.adapter = postAdapter
+
+        //It will change after (only for demo)
+        val navController = findNavController()
+        binding.button2.setOnClickListener {
+            navController.navigate(R.id.action_homePageFragment_to_searchFragment)
+        }
 
         return binding.root
     }
