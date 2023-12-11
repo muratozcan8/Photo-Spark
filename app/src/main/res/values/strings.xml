@@ -13,4 +13,6 @@
     <string name="enter_username">Enter username</string>
     <string name="enter_comment">Enter Comment</string>
     <string name="share">SHARE</string>
+    <string name="nav_open">Open Navigation Drawer</string>
+    <string name="nav_close">Close Navigation Drawer</string>
 </resources>

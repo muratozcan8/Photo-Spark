@@ -45,10 +45,12 @@ class HomePageFragment : Fragment() {
         binding.recyclerView.adapter = postAdapter
 
         //It will change after (only for demo)
-        val navController = findNavController()
+       /* val navController = findNavController()
         binding.button2.setOnClickListener {
             navController.navigate(R.id.action_homePageFragment_to_searchFragment)
         }
+        
+        */
 
         return binding.root
     }
@@ -81,7 +83,9 @@ class HomePageFragment : Fragment() {
                                 val post = Post(username, comment, downloadUrl, "0", "0", uid, formattedDate)
                                 postArrayList.add(post)
                             }
+
                         }
+                        Log.e("data",postArrayList.toString())
 
                         postAdapter.notifyDataSetChanged()
                     }
