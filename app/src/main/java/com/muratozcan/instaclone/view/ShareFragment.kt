@@ -111,8 +111,10 @@ class ShareFragment : Fragment() {
 
                             firestore.collection("Post").add(postMap).addOnSuccessListener {
 
-                                val navController = findNavController()
+                                /*val navController = findNavController()
                                 navController.navigate(R.id.action_homePageFragment_to_searchFragment)
+
+                                 */
 
                             }.addOnFailureListener {
                                 Toast.makeText(this.context, it.localizedMessage, Toast.LENGTH_LONG).show()
@@ -134,6 +136,7 @@ class ShareFragment : Fragment() {
 
         if (ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this.requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Log.e("Data","snackbar")
                 Snackbar.make(view, "Permission needed for gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission") {
                     //request permission
                     permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
