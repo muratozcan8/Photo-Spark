@@ -2,13 +2,17 @@ package com.muratozcan.instaclone.view
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Message
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +21,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
@@ -28,19 +32,23 @@ import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage
 import com.muratozcan.instaclone.R
-import com.muratozcan.instaclone.databinding.FragmentLoginBinding
 import com.muratozcan.instaclone.databinding.FragmentShareBinding
 import java.util.UUID
 
-class ShareFragment : Fragment() {
+class ShareFragment : Fragment(), LocationListener {
 
     private lateinit var binding: FragmentShareBinding
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
-    var selectedPicture: Uri? = null
+    private var selectedPicture: Uri? = null
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
+    private lateinit var locationManager: LocationManager
+    private lateinit var locationListener: LocationListener
+    private lateinit var permissionLauncherForLocation: ActivityResultLauncher<String>
+    private lateinit var latitude: String
+    private lateinit var longitude: String
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,10 +56,19 @@ class ShareFragment : Fragment() {
 
 
         registerLauncher()
+        resisterLauncherForLocation()
 
         auth = Firebase.auth
         firestore = Firebase.firestore
         storage = Firebase.storage
+
+        locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        locationListener = LocationListener {
+            p0 -> Log.e("Share", "location: ${p0.latitude} / ${p0.longitude}")
+            stopLocationUpdates()
+        }
+        setLocation()
 
         binding.imageView.setOnClickListener {
             selectImage(it)
@@ -82,8 +99,8 @@ class ShareFragment : Fragment() {
 
 
                     var username = ""
-                    var lat = 0;
-                    var lng = 0;
+                    val lat = latitude;
+                    val lng = longitude;
 
                     if (auth.currentUser != null) {
                         val docRef = firestore.collection("User").document(auth.currentUser!!.uid)
@@ -105,16 +122,15 @@ class ShareFragment : Fragment() {
                             postMap.put("username", username)
                             postMap.put("comment", binding.editTextComment.text.toString())
                             postMap.put("date", Timestamp.now())
-                            postMap.put("lat", lat.toString())
-                            postMap.put("lng", lng.toString())
+                            postMap.put("lat", lat)
+                            postMap.put("lng", lng)
                             postMap.put("uid", auth.currentUser!!.uid)
 
                             firestore.collection("Post").add(postMap).addOnSuccessListener {
 
-                                /*val navController = findNavController()
-                                navController.navigate(R.id.action_homePageFragment_to_searchFragment)
-
-                                 */
+                                val intent = Intent(requireContext(), requireActivity().javaClass)
+                                requireActivity().finish()
+                                requireActivity().startActivity(intent)
 
                             }.addOnFailureListener {
                                 Toast.makeText(this.context, it.localizedMessage, Toast.LENGTH_LONG).show()
@@ -151,6 +167,20 @@ class ShareFragment : Fragment() {
         }
     }
 
+    private fun setLocation() {
+        if (ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this.requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Snackbar.make(binding.root, "Permission needed for location", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission") {
+                    permissionLauncherForLocation.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                }.show()
+            } else {
+                permissionLauncherForLocation.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10f, this)
+        }
+    }
+
     private fun registerLauncher() {
 
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -175,6 +205,34 @@ class ShareFragment : Fragment() {
                 Toast.makeText(this.context, "Permission needed!", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun resisterLauncherForLocation() {
+
+        permissionLauncherForLocation = registerForActivityResult(ActivityResultContracts.RequestPermission()) {result ->
+            if (result) {
+                if (ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0f, this)
+                }
+            } else {
+                Toast.makeText(this.context, "Permission needed for location!", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    override fun onLocationChanged(p0: Location) {
+        Log.e("Share", "location: ${p0.latitude} / ${p0.longitude}")
+        latitude = p0.latitude.toString()
+        longitude = p0.longitude.toString()
+        stopLocationUpdates()
+    }
+
+    private fun stopLocationUpdates() {
+        locationManager.removeUpdates(this)
+    }
+
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+        Log.e("Share", "Status")
     }
 
 }

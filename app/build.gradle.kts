@@ -53,6 +53,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation ("com.squareup.picasso:picasso:2.8")
 
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
     testImplementation("junit:junit:4.13.2")
