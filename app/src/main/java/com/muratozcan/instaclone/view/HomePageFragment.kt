@@ -100,8 +100,7 @@ class HomePageFragment : Fragment() {
                 if (error != null) {
                     Toast.makeText(this.context, error.localizedMessage, Toast.LENGTH_LONG).show()
                 } else {
-                    if (value != null) {
-
+                    if (value!= null) {
                         val documents = value.data
                         getData(documents)
                     }

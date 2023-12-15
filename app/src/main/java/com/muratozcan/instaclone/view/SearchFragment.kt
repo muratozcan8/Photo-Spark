@@ -91,12 +91,13 @@ class SearchFragment : Fragment() {
 
         }.addOnFailureListener {
             Log.e("SEARCH","NOT FOUND USER: ${it.localizedMessage}")
+                if (userList.size<=0){
+                    Log.e("TOASTss","NOT FOUND USER")
+                    Toast.makeText(this.context, "No user with this name was found.", Toast.LENGTH_LONG).show()
+                }
         }
 
-        if (userList.size<=0){
-            Log.e("TOAST","NOT FOUND USER")
-            Toast.makeText(this.context, "No user with this name was found.", Toast.LENGTH_LONG).show()
-        }
+
     }
 
 
