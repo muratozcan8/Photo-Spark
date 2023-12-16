@@ -40,11 +40,22 @@ class SearchFragment : Fragment() {
 
         userList= ArrayList<User>()
 
+        binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+            } else {
+                if (binding.searchEditText.text.toString().isEmpty()){
+                    binding.recyclerViewSearch.visibility=View.GONE
+                }
+            }
+        }
+
         binding.btnSearch.setOnClickListener {
 
             val searchedText = binding.searchEditText.text.toString()
             if (searchedText.isNotEmpty()) {
                 getUsers(searchedText)
+                binding.searchEditText.text.clear()
+                binding.recyclerViewSearch.visibility=View.VISIBLE
             } else {
                 userList.clear()
                 userAdapter = UserAdapter(userList)
