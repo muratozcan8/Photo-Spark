@@ -52,6 +52,8 @@ class SignUpFragment : Fragment() {
                     val friendshipMap = hashMapOf<String, ArrayList<String>>()
                     val follow = ArrayList<String>();
                     friendshipMap.put("Follow", follow);
+                    val followers = ArrayList<String>();
+                    friendshipMap.put("Followers", followers);
 
                     firestore.collection("Friendship").document(auth.currentUser?.uid.toString()).set(friendshipMap).addOnSuccessListener {
                         firestore.collection("User").document(auth.currentUser?.uid.toString()).set(postMap).addOnSuccessListener {

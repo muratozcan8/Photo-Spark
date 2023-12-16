@@ -41,8 +41,8 @@ class ProfileFragment : Fragment() {
         getOwnInformations()
 
         friendList= ArrayList<Friendship>()
-        friendList.clear()
-        friendAdapter = FriendshipAdapter(friendList)
+        //friendList.clear()
+        //friendAdapter = FriendshipAdapter(friendList)
         getFriends()
 
         /*binding.recyclerViewFriends.layoutManager = LinearLayoutManager(this.context)
@@ -91,6 +91,7 @@ class ProfileFragment : Fragment() {
                     binding.followingCountTextView.text=followerList.size.toString()
                     friendList.clear()
                     friendAdapter = FriendshipAdapter(friendList)
+                    Log.e("Adapter", "FriendList: " + friendList.size)
                     for (follow in followList){
                         val userDoc=db.collection("User").document(follow).addSnapshotListener {userInfo,error ->
                             if(error!=null){
@@ -103,15 +104,15 @@ class ProfileFragment : Fragment() {
                                 val friend = Friendship(email,username,userID)
                                 friendList.add(friend)
                             }
+                            binding.recyclerViewFriends.layoutManager = LinearLayoutManager(this.context)
+                            friendAdapter = FriendshipAdapter(friendList)
+                            binding.recyclerViewFriends.adapter = friendAdapter
+                            friendAdapter.notifyDataSetChanged()
                         }
                         Log.e("UserInfo",userDoc.toString())
                     }
 
-                    binding.recyclerViewFriends.layoutManager = LinearLayoutManager(this.context)
-                    Log.e("FRIEND_COUNT",friendList.size.toString())
-                    friendAdapter = FriendshipAdapter(friendList)
-                    binding.recyclerViewFriends.adapter = friendAdapter
-                    friendAdapter.notifyDataSetChanged()
+
 
                     Log.e("Friendship",followList.toString())
                 }
