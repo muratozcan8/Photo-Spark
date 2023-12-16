@@ -2,12 +2,12 @@ package com.muratozcan.instaclone.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.UiSettings
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.muratozcan.instaclone.R
@@ -28,10 +28,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
+        // Enable zoom controls
+        val uiSettings: UiSettings = mMap.uiSettings
+        uiSettings.isZoomControlsEnabled = true
 
         val recievedIntent = intent
         val lat = recievedIntent.getStringExtra("lat")
@@ -42,6 +47,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val location = lat?.let { lng?.let { it1 -> LatLng(it.toDouble(), it1.toDouble()) } }
         location?.let { MarkerOptions().position(it).title(username) }
             ?.let { mMap.addMarker(it) }
-        location?.let { CameraUpdateFactory.newLatLngZoom(it, 10f) }?.let { mMap.moveCamera(it) }
+        location?.let { CameraUpdateFactory.newLatLngZoom(it, 10f) }?.let { mMap.moveCamera(it)
+        }
     }
 }
