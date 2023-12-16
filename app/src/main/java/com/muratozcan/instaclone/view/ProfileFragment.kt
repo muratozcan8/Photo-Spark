@@ -35,27 +35,19 @@ class ProfileFragment : Fragment() {
         binding=FragmentProfileBinding.inflate(inflater,container,false)
 
         db= Firebase.firestore
-
         auth = Firebase.auth
 
         getOwnInformations()
 
         friendList= ArrayList<Friendship>()
-        //friendList.clear()
-        //friendAdapter = FriendshipAdapter(friendList)
-        getFriends()
 
-        /*binding.recyclerViewFriends.layoutManager = LinearLayoutManager(this.context)
-        friendAdapter = FriendshipAdapter(friendList)
-        binding.recyclerViewFriends.adapter = friendAdapter*/
+        getFriends()
 
         binding.buttonLogOut.setOnClickListener {
             logOut()
         }
 
-
         return binding.root
-
     }
 
     private fun getOwnInformations() {
@@ -67,7 +59,6 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-
 
     private fun getFriends() {
         friendList.clear()
@@ -91,7 +82,6 @@ class ProfileFragment : Fragment() {
                     binding.followingCountTextView.text=followerList.size.toString()
                     friendList.clear()
                     friendAdapter = FriendshipAdapter(friendList)
-                    Log.e("Adapter", "FriendList: " + friendList.size)
                     for (follow in followList){
                         val userDoc=db.collection("User").document(follow).addSnapshotListener {userInfo,error ->
                             if(error!=null){
@@ -109,14 +99,8 @@ class ProfileFragment : Fragment() {
                             binding.recyclerViewFriends.adapter = friendAdapter
                             friendAdapter.notifyDataSetChanged()
                         }
-                        Log.e("UserInfo",userDoc.toString())
                     }
-
-
-
-                    Log.e("Friendship",followList.toString())
                 }
-
             }
         }
     }
@@ -127,7 +111,5 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
     }
-
-
 
 }

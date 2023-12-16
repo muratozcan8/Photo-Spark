@@ -54,59 +54,26 @@ class FriendshipAdapter(private var friendList:ArrayList<Friendship>): RecyclerV
             }
         }
 
-
-
         holder.binding.buttonFriendFollow.setOnClickListener {
-            if (holder.binding.buttonFriendFollow.text.toString()=="Follow"){
-                if (auth.currentUser!=null){
-                    val docRef = firestore.collection("Friendship").document(auth.currentUser!!.uid)
-                    docRef.addSnapshotListener{ value,error ->
-                        if(error!=null){
-                            Log.e("ERROR","Error in getFriends()")
-                        }
-                        if (value != null && value.exists()) {
-                            firestore.collection("Friendship").document(auth.currentUser!!.uid)
-                                .update("Follow", FieldValue.arrayUnion(friend.userID))
-                                .addOnSuccessListener {
-                                    holder.binding.buttonFriendFollow.text="Unfollow"
-                                }.addOnFailureListener {
-                                    Log.e("FOLLOW","Error Occured When Following New Friend")
-                                }
-                            firestore.collection("Friendship").document(friend.userID)
-                                .update("Followers",FieldValue.arrayUnion(auth.currentUser!!.uid))
-                                .addOnSuccessListener {
-                                }.addOnFailureListener {
-                                    Log.e("FOLLOWERS","Error Occured When Following New Friend")
-                                }
-                        } else {
-                            Log.d("Error", "Current data: null")
-                        }
-                    }
-                }
-            }else{
-                if (auth.currentUser!=null){
-                    val docRef = firestore.collection("Friendship").document(auth.currentUser!!.uid)
-                    docRef.addSnapshotListener { value,error ->
-                        if(error!=null){
-                            Log.e("ERROR","Error in getFriends()")
-                        }
-                        if (value != null && value.exists()) {
-                            firestore.collection("Friendship").document(auth.currentUser!!.uid).update("Follow",
-                                FieldValue.arrayRemove(friend.userID))
-                                .addOnSuccessListener {
-                                    holder.binding.buttonFriendFollow.text="Follow"
-                                }.addOnFailureListener {
-                                    Log.e("FOLLOW","Error Occured When Unfollowing Friend")
-                                }
-                            firestore.collection("Friendship").document(friend.userID)
-                                .update("Followers",FieldValue.arrayRemove(auth.currentUser!!.uid))
-                                .addOnSuccessListener {
-                                }.addOnFailureListener {
-                                    Log.e("FOLLOW","Error Occured When Unfollowing Friend")
-                                }
-                        } else {
-                            Log.d("Error", "Current data: null")
-                        }
+            if (auth.currentUser!=null){
+                val docRef = firestore.collection("Friendship").document(auth.currentUser!!.uid)
+                docRef.get().addOnSuccessListener { value ->
+                    if (value != null && value.exists()) {
+                        firestore.collection("Friendship").document(auth.currentUser!!.uid).update("Follow",
+                            FieldValue.arrayRemove(friend.userID))
+                            .addOnSuccessListener {
+                                holder.binding.buttonFriendFollow.text="Follow"
+                            }.addOnFailureListener {
+                                Log.e("FOLLOW","Error Occured When Unfollowing Friend")
+                            }
+                        firestore.collection("Friendship").document(friend.userID)
+                            .update("Followers",FieldValue.arrayRemove(auth.currentUser!!.uid))
+                            .addOnSuccessListener {
+                            }.addOnFailureListener {
+                                Log.e("FOLLOW","Error Occured When Unfollowing Friend")
+                            }
+                    } else {
+                        Log.d("Error", "Current data: null")
                     }
                 }
             }

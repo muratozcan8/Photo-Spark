@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.SearchFragment">
+    tools:context=".view.SearchFragment"
+    android:background="@color/light_green">
 
     <Toolbar
         android:id="@+id/layout_search"
@@ -42,6 +43,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/button_background"
         android:text="Search"
+        android:textColor="@color/light_green"
         android:layout_below="@id/layout_search">
 
     </Button>

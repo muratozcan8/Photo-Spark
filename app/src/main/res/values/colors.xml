@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#068251</color>
     <color name="black_soft">#707070</color>
+    <color name="light_green">#d0f0c0</color>
+    <color name="jungle_green">#29AB87</color>
 </resources>

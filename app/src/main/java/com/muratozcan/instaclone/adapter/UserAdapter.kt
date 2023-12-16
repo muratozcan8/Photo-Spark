@@ -56,7 +56,6 @@ class UserAdapter (private var userList:ArrayList<User>):RecyclerView.Adapter<Us
 
         holder.binding.followBtnSearch.setOnClickListener {
             if (holder.binding.followBtnSearch.text.toString()=="Follow"){
-
                 if (auth.currentUser!=null){
                     val docRef = firestore.collection("Friendship").document(auth.currentUser!!.uid)
                     docRef.get().addOnSuccessListener { value ->
@@ -81,6 +80,7 @@ class UserAdapter (private var userList:ArrayList<User>):RecyclerView.Adapter<Us
                     }
                 }
             }else{
+
                 if (auth.currentUser!=null){
                     val docRef = firestore.collection("Friendship").document(auth.currentUser!!.uid)
                     docRef.get().addOnSuccessListener { value ->

@@ -41,8 +41,7 @@ class SearchFragment : Fragment() {
         userList= ArrayList<User>()
 
         binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-            } else {
+            if (!hasFocus) {
                 if (binding.searchEditText.text.toString().isEmpty()){
                     binding.recyclerViewSearch.visibility=View.GONE
                 }
@@ -71,7 +70,6 @@ class SearchFragment : Fragment() {
         userAdapter = UserAdapter(userList)
         db.collection("User").whereGreaterThanOrEqualTo("username", query)
             .whereLessThanOrEqualTo("username", query + "\uf8ff").get().addOnSuccessListener { value ->
-
                 if (value!=null){
                     if (!value.isEmpty){
                         userList.clear()
@@ -85,11 +83,9 @@ class SearchFragment : Fragment() {
                                 userList.add(user)
                             }
                         }
-
                         userAdapter = UserAdapter(userList)
                         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(this.context)
                         binding.recyclerViewSearch.adapter = userAdapter
-
                         userAdapter.notifyDataSetChanged()
                     }else{
                         userList.clear()
@@ -99,7 +95,6 @@ class SearchFragment : Fragment() {
                     Log.e("TOAST","NOT FOUND USER")
                     Toast.makeText(this.context, "No user with this name was found.", Toast.LENGTH_LONG).show()
                 }
-
         }.addOnFailureListener {
             Log.e("SEARCH","NOT FOUND USER: ${it.localizedMessage}")
                 if (userList.size<=0){
@@ -107,9 +102,6 @@ class SearchFragment : Fragment() {
                     Toast.makeText(this.context, "No user with this name was found.", Toast.LENGTH_LONG).show()
                 }
         }
-
-
     }
-
 
 }
