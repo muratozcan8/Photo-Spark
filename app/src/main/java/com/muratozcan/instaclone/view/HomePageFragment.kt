@@ -41,16 +41,8 @@ class HomePageFragment : Fragment() {
         getFriends()
         //getData()
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
-        postAdapter = PostAdapter(postArrayList)
+        postAdapter = PostAdapter(this.requireContext(), postArrayList)
         binding.recyclerView.adapter = postAdapter
-
-        //It will change after (only for demo)
-       /* val navController = findNavController()
-        binding.button2.setOnClickListener {
-            navController.navigate(R.id.action_homePageFragment_to_searchFragment)
-        }
-        
-        */
 
         return binding.root
     }
@@ -74,13 +66,15 @@ class HomePageFragment : Fragment() {
                             val downloadUrl = document.get("downloadUrl") as String
                             val uid = document.get("uid") as String
                             val date = document.get("date") as Timestamp
+                            val lat = document.get("lat") as String
+                            val lng = document.get("lng") as String
 
                             val formattedDate = convertTimestampToDateString(date.seconds)
 
                             val friendList = friends?.get("Follow") as ArrayList<*>
 
                             if (friendList.contains(uid) || uid == auth.currentUser?.uid) {
-                                val post = Post(username, comment, downloadUrl, "0", "0", uid, formattedDate)
+                                val post = Post(username, comment, downloadUrl, lat, lng, uid, formattedDate)
                                 postArrayList.add(post)
                             }
 
