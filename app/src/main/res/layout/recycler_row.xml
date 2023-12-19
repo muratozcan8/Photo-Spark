@@ -24,7 +24,7 @@
                 android:layout_width="24dp"
                 android:layout_height="49dp"
                 android:layout_gravity="center"
-                android:layout_margin="8dp"
+                android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:src="@drawable/user">
 
@@ -38,15 +38,15 @@
                 android:layout_margin="4dp"
                 android:layout_weight="2"
                 android:text="Username"
-                android:textColor="@color/green"
+                android:textColor="#4F4F4F"
                 android:textSize="20sp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/recyclerDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="7dp"
+                android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:text="Dec 10, 2023"
@@ -57,14 +57,33 @@
             </TextView>
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/loadingPanel"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:gravity="center" >
 
-        <ImageView
-            android:id="@+id/recyclerImageView"
-            android:layout_width="350dp"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            />
+            <ImageView
+                android:id="@+id/recyclerImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="5dp"
+                android:background="#FFFFFF"></ImageView>
+
+            <ProgressBar
+                android:id="@+id/recyclerViewProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminate="true" />
+        </RelativeLayout>
+
+
+
 
         <LinearLayout
             android:layout_width="match_parent"

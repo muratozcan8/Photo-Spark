@@ -5,6 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -33,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage
 import com.muratozcan.instaclone.R
 import com.muratozcan.instaclone.databinding.FragmentShareBinding
+import com.squareup.picasso.Transformation
 import java.util.UUID
 
 class ShareFragment : Fragment(), LocationListener {
@@ -91,6 +93,7 @@ class ShareFragment : Fragment(), LocationListener {
         val imageReference = reference.child("images").child(imageName)
 
         if (selectedPicture != null) {
+
             imageReference.putFile(selectedPicture!!).addOnSuccessListener {
                 //download url -> image
                 val uploadPictureReference = storage.reference.child("images").child(imageName)
@@ -145,6 +148,9 @@ class ShareFragment : Fragment(), LocationListener {
             }.addOnFailureListener {
                 Toast.makeText(this.context, it.localizedMessage, Toast.LENGTH_LONG).show()
             }
+        }
+        else {
+            Toast.makeText(this.context, "Please select an image!", Toast.LENGTH_LONG).show()
         }
     }
 

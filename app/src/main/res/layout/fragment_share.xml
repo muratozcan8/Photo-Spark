@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ShareFragment">
+    tools:context=".view.ShareFragment"
+    android:background="#F2F2F2">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="287dp"
         android:layout_height="226dp"
         android:layout_marginTop="100dp"
-        android:src="@drawable/top_background"
+        android:src="@drawable/upload"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
